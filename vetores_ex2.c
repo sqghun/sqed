@@ -21,7 +21,7 @@ int main() {
        if(m>0){
          if(vetM[m]<vetM[m-1]){
            printf("Erro");
-           exit;
+           break;
          }     
        m++;
        printf("%d > ", n+1);  
@@ -35,7 +35,7 @@ int main() {
        if(n>0){
          if(vetN[n]<vetN[n-1]){
            printf("Erro");
-           exit;
+           break;
          }     
        n++;
        printf("%d > ", n+1);  
