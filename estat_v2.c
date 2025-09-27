@@ -1,4 +1,4 @@
-// Alocacao dinamica
+// Estatística descritiva
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,22 +6,17 @@
 #define MAXS 200
 
 int main() {
-    int num, i , j;
-    float *vetor, *vetorsort;
-    float soma=0;
-    float min, max, dp, mediana, media;
-    float ant; 
+    int num, i , j, pontomedio;
+    float *vetor;
+    float soma=0, variancia=0;
+    float min, max, sd, mediana, media;
+    float ant;
+    float resto, div; 
 
     printf("Numeros na serie:");     
     scanf("%d", &num);
     
     vetor = malloc(num * sizeof(float));
-    if(!vetor){ //alocação não foi bem sucedida => pd == NULL
-       printf("Erro de alocação dinamica de memória!\n");
-       exit(-1);
-    }
-
-    vetorsort = malloc(num * sizeof(float));
     if(!vetor){ //alocação não foi bem sucedida => pd == NULL
        printf("Erro de alocação dinamica de memória!\n");
        exit(-1);
@@ -45,14 +40,18 @@ int main() {
        //printf("Max: %f\n", max); 
        //printf("i: %f\n", i); 
     }    
-    
+    // Cálculo da média  
     media = soma/num;
 
+    // Cálculo do desvio padrão
+    soma = 0;
     for(int i=0; i<num; i++) {
       soma += (vetor[i]-media) * (vetor[i]-media);
     }
-    dp = sqrt(soma/num);
+    variancia = soma/num;
+    sd = sqrt(variancia);
 
+    // Cálculo da mediana
     for(int j=0; j<num; j++){
       for(int i=0; i<num; i++) {
         ant=vetor[i];
@@ -62,13 +61,22 @@ int main() {
         }
       }  
     }
-    for(int i=0; i<num; i++) {
-      printf("Vetor %d: %.2f\n", i, vetor[i]); 
+    pontomedio = num / 2;
+    resto = num % 2;
+    //printf("resto %.2f, pontomedio %d, num %d\n", div, resto, pontomedio, num); 
+    if(resto==0){
+      mediana = (vetor[pontomedio-1] + vetor[pontomedio]) / 2;
+    }else {
+      mediana = vetor[pontomedio];
     }
+    //for(int i=0; i<num; i++) {
+    //  printf("Vetor %d: %.2f\n", i, vetor[i]); 
+    // }
 
-    printf("Desvio Padrao: %.5f\n", dp);      
-    printf("Media: %.3f\n", soma/num); 
-    printf("Minimo: %.2f\n", min); 
-    printf("Maximo: %.2f\n", max); 
+    printf("\nDesvio Padrao: %.5f\n", sd);      
+    printf("Media: %.3f\n", media); 
+    printf("Mediana: %.3f\n", mediana); 
+    printf("Valor Minimo: %.2f\n", min); 
+    printf("Valor Maximo: %.2f\n", max); 
 }
 
