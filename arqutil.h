@@ -7,6 +7,11 @@
 
 #define MAXLIN 900
 
+#define NOME  0
+#define CARGO 1
+#define ORG   2
+#define UORG  3
+
 typedef struct 
 {
     char ids[20];      // CPO 1
@@ -17,7 +22,17 @@ typedef struct
 } Registro;
 
 
+typedef struct 
+{
+    char org[100];     
+    int indice;    
+} RegIndOrg;
+
+
 void limpa(char *);
-char *extrai(char *, char *)
-Registro coleta(char *)
+char *extrai(char *, char *);
+Registro coleta(char *);
+void imprimeVetorReg(Registro *r, int n);
+int econtraRegs(char *q, int tipo, Registro **);
+//int encontraRegsIndiceOrg(char *q, int tipo, Registro **regvet);
 

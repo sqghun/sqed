@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
   }          
   limpa(query);
 
-  encontrados = encontraRegs(query, ORG, &listaRegistros);
+  encontrados = encontraRegsEstruturado(query, ORG, &listaRegistros);
+  printf("\n%d Registros encontrados\n", encontrados);
  
 }

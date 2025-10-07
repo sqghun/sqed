@@ -9,14 +9,14 @@
 
 #define MAXLIN 900
 
-typedef struct 
-{
-    char ids[20];      // CPO 1
-    char nome[100];    // CPO 2
-    char cargo[60];    // CPO 5
-    char org[100];     // CPO 17
-    char uorg[100];    // CPO 19
-} Registro;
+//typedef struct 
+//{
+//    char ids[20];      // CPO 1
+//    char nome[100];    // CPO 2
+//    char cargo[60];    // CPO 5
+//    char org[100];     // CPO 17
+//    char uorg[100];    // CPO 19
+//} Registro;
 
 char *extrai(char *ptr, char *str){
     while(*ptr!='"'){
@@ -88,8 +88,13 @@ int encontraRegs(Registro *listaRegs, char *q, int tipo, Registro **regvet){
    Registro reg;
    char linha[MAXLIN];     
    int conta = 0;
+   Registro *pregs;
+   int alocado=0;
+   int passo=1000;
+   //*regvet = NULL;
    
-   *regvet = NULL;
+   alocado += passo;
+   pregs = malloc(alocado*sizeof(Registro));
    
    arq = fopen("/home/pub/ed/Cadastro.csv","r"); 
  
@@ -105,13 +110,99 @@ int encontraRegs(Registro *listaRegs, char *q, int tipo, Registro **regvet){
          (tipo == UORG && strstr(reg.uorg,q)) ||
          (tipo == NOME && strstr(reg.nome,q)) ||
          (tipo == CARGO && strstr(reg.cargo,q))) {
-           conta++
-           *regvet = realloc(*regvet, conta * sizeof(Registro));
-           memcpy(*regvet[conta-1], &reg);
-           imprimeReg(reg);
+           conta++;
+           if(conta>alocado) {
+             alocado += passo;
+             pregs = realloc(pregs, alocado * sizeof(Registro)); 
+           }
+           //*regvet = realloc(*regvet, conta * sizeof(Registro));
+           memcpy(pregs+conta-1, &reg, sizeof(Registro));
+           //imprimeReg(reg);
      }
   }   
+  *regvet = pregs;
   return conta;
-               
 }
+
+int encontraRegsEstruturado(char *q, int tipo, Registro **regvet){
+   FILE *arq; 
+   Registro reg;
+   char linha[MAXLIN];     
+   int conta = 0;
+   Registro *pregs;
+   int alocado=0;
+   int passo=1000;
+   //*regvet = NULL;
+   
+   alocado += passo;
+   pregs = malloc(alocado*sizeof(Registro));
+   
+   arq = fopen("/home/pub/ed/CadEstruturado.db","r"); 
+ 
+   if(!arq){
+      printf("Erro de abertura de arquivo.\n");
+      exit(-1);
+   }   
+  
+   while(!feof(arq)) {
+     fread(&reg, sizeof(Registro), 1, arq);
+     if( (tipo == ORG && strstr(reg.org,q)) ||
+         (tipo == UORG && strstr(reg.uorg,q)) ||
+         (tipo == NOME && strstr(reg.nome,q)) ||
+         (tipo == CARGO && strstr(reg.cargo,q))) {
+           conta++;
+           if(conta>alocado) {
+             alocado += passo;
+             pregs = realloc(pregs, alocado * sizeof(Registro)); 
+           }
+           //*regvet = realloc(*regvet, conta * sizeof(Registro));
+           memcpy(pregs+conta-1, &reg, sizeof(Registro));
+           //imprimeReg(reg);
+     }
+  }   
+  *regvet = pregs;
+  return conta;
+}
+
+int encontraRegsIndiceOrg(char *q, int tipo, Registro **regvet){
+   FILE *arq, *arqindice;; 
+   Registro reg;
+   RegIndOrg regind;
+
+   char linha[MAXLIN];     
+   int conta = 0;
+   Registro *pregs = NULL;
+   int alocado=0;
+   int passo=1000;
+   
+   alocado += passo;
+   pregs = malloc(alocado*sizeof(Registro));
+   
+   arqindice = fopen("/tmp/indiceOrg.db","r"); 
+   arqindice = fopen("/home/pub/ed/CadEstruturado.db","r"); 
+ 
+   if(!arq || !arqindice){
+      printf("Erro de abertura de arquivo.\n");
+      exit(-1);
+   }   
+  
+   while(!feof(arqindice)) {
+     fread(&reg, sizeof(RegindOrg), 1, arqindice);
+     if(strstr(regind.org,q)) {
+       fseek(arqindice, regind.indice*sizeof(Registro), SEEK_SET); 
+       fread(&reg, sizeof(Registro),1, arq);  
+       conta++;
+       if(conta>alocado) {
+          alocado += passo;
+          pregs = realloc(pregs, alocado * sizeof(Registro)); 
+       }
+        memcpy(pregs+conta-1, &reg, sizeof(Registro));
+     }
+  }   
+  *regvet = pregs;
+  return conta;
+}
+
+
+
 
