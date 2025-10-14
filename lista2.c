@@ -40,6 +40,64 @@ void imprimeLL(NoListaLigada *lista){
   imprimeLL(lista->proximo);
 }
 
+
+void imprimeLLReversa(NoListaLigada *lista){
+  if(lista == NULL) return;
+  imprimeLL(lista->proximo);
+  printf("%d\n", lista->numero);
+}
+
+void imprimeNo(NoListaLigada *no){
+  printf("%d\n", no->numero);
+}
+
+NoListaLigada *encontraNo(NoListaLigada *lista, int q) {
+  NoListaLigada *paux;
+  paux = lista;
+  
+  while(paux) { //paux != NULL
+    if(paux->numero == q);
+      return paux;  
+    paux = paux->proximo;
+  }
+  return NULL;
+}
+
+void removeNo(NoListaLigada **lista, NoListaLigada *elemento) {
+  NoListaLigada *paux;
+  
+  if(*lista==elemento){
+    *lista = elemento->proximo;
+     free(elemento);
+     return;
+  }
+    
+  paux = *lista;
+  
+  while(paux->proximo!=elemento && paux!=NULL) { 
+    paux = paux->proximo;
+  }
+   
+  if(paux){
+    paux->proximo = elemento->proximo;
+    free(elemento);
+  } 
+}
+
+NoListaLigada *noAnterior(NoListaLigada *lista, NoListaLigada *no) {
+  NoListaLigada *paux;
+  
+  
+  if(no==lista) return NULL;
+  paux = lista;
+  
+  while(paux->proximo!=no && paux->proximo!=NULL){
+      paux = paux->proximo;
+  }
+  if(paux->proximo==no) return paux;  
+  return NULL;
+}
+
 void insereNoInicio(NoListaLigada **lista, int carga) {
     NoListaLigada *novoNo;
   
@@ -61,11 +119,21 @@ void insereNoInicio(NoListaLigada **lista, int carga) {
 
 int main() {
   NoListaLigada *registro=NULL;
+
+  NoListaLigada *noAux;
+
   
   insereNo(&registro, 10);
   insereNo(&registro, 11);
   insereNo(&registro, 19);
   insereNoInicio(&registro, 9);
 
-  imprimeLL(registro);
-}  
+  removeNo(&registro, encontraNo(registro,11));
+
+  //imprimeLL(registro);
+  //imprimeLL(encontraNo(registro,11));
+  imprimeLLReversa(registro);
+  
+  printf("Encontrando nó anterior ao 12 \n");
+  imprimeNo(noAnterior(registro, encontraNo(registro,12)));
+  }  
