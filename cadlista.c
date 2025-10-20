@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
   char query[100];
   int encontrados=0;
      
-  ListaReg *listaRegistros;   
+  ListaReg *listaRegistros=NULL;   
 
   if(argc<2){ // não passou parâmetros para o programa
      printf("\nEntre com parte da org desejada: ");
