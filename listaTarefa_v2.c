@@ -25,10 +25,7 @@ void push(NoListaLigada **lista, int valor) {
     novoNo->numero=valor;
     novoNo->proximo=NULL;
     
-    //printf("Entrou no push.\n");
-
     if(*lista==NULL) {
-       //printf("Entrou no NULL.\n");
        novoNo->numero=valor;
        novoNo->proximo=NULL;
        *lista = novoNo;
@@ -63,7 +60,6 @@ int peek(NoListaLigada *lista, int *valor) {
 }
 
 void imprimeLista(NoListaLigada *lista){
-    //printf("Entrou no imprime.\n");
     if(lista==NULL) return;
     printf(" %d:\n", lista->numero);
     imprimeLista(lista->proximo);
@@ -131,9 +127,3 @@ int main() {
         }
     }
 }
-
-
-
-
-
-
