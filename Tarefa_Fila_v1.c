@@ -121,7 +121,7 @@ int main() {
                 printf("lista vazia\n");
             break;
         case 'X':
-            printf("Vai entrar no imprime.\n");
+            //printf("Vai entrar no imprime.\n");
             //imprimeLista(lista);
             break;
         default:
